@@ -1,15 +1,15 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { House, CircleUserRound, Search, Menu } from 'lucide-react';
+import { House, CircleUserRound, Search, Menu, UserRound } from 'lucide-react';
 import { useRouter, usePathname } from "next/navigation";
 import { useSidebar } from "./ui/sidebar";
 
 const mobileNav = [
-  {text: 'Home', link: "/", icon: <House />},
-  {text: 'Profile', link: "/profile", icon: <CircleUserRound />},
-  {text: 'Search', link: "/search", icon: <Search />},
-  {text: 'Menu', link: "menu", icon: <Menu />},
+  {text: 'Asosiy', link: "/", icon: <House />},
+  {text: 'Profil', link: "/profile", icon: <UserRound/>},
+  {text: 'Qidirish', link: "/search", icon: <Search />},
+  {text: 'Menyu', link: "menu", icon: <Menu />},
 ]
 
 export default function Header() {

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import ContentImg from "../../assets/images/content.jpg";
 
 const Page = () => {
   return (
@@ -27,18 +26,22 @@ const Page = () => {
                 </p>
               </div>
               <Image
-                src={ContentImg}
+                src="/images/content.jpg"
                 alt="content"
-                className="rounded-xl w-full h-auto"
+                className="rounded-xl object-cover"
+                width={300}
+                height={200}
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               <div className="space-y-2 cursor-pointer group">
                 <div className="overflow-hidden rounded-xl">
                   <Image
-                    src={ContentImg}
+                    src="/images/content.jpg"
                     alt="news"
-                    className="w-full h-[200px] object-cover"
+                    className="object-cover"
+                    width={300}
+                    height={200}
                   />
                 </div>
                 <div className="text-gray-500 text-sm">23:34 / 26.03.2025</div>
@@ -50,9 +53,11 @@ const Page = () => {
               <div className="space-y-2 cursor-pointer group">
                 <div className="overflow-hidden rounded-xl">
                   <Image
-                    src={ContentImg}
+                    src="/images/content.jpg"
                     alt="news"
-                    className="w-full h-[200px] object-cover"
+                    className="object-cover"
+                    width={300}
+                    height={200}
                   />
                 </div>
                 <div className="text-gray-500 text-sm">23:34 / 26.03.2025</div>
@@ -64,9 +69,11 @@ const Page = () => {
               <div className="space-y-2 cursor-pointer group">
                 <div className="overflow-hidden rounded-xl">
                   <Image
-                    src={ContentImg}
+                    src="/images/content.jpg"
                     alt="news"
-                    className="w-full h-[200px] object-cover"
+                    className="object-cover"
+                    width={300}
+                    height={200}
                   />
                 </div>
                 <div className="text-gray-500 text-sm">23:34 / 26.03.2025</div>
