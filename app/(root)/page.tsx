@@ -15,7 +15,7 @@ const page = () => {
   //     }
   // }, [router]);
 
-  return <div>Home page</div>;
+  return <div className="h-[2000px] bg-amber-50">Home page</div>;
 };
 
 export default page;
