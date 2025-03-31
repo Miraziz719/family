@@ -17,7 +17,7 @@ const Page = () => {
                   Dobot Atom nomli robot nonushta tayyorlash, turli hajmdagi
                   yuklarni tashish kabi murakkab vazifalarni uddalashga qodir.
                 </h2>
-                <p className="text-gray-700 text-base leading-relaxed line-clamp-5">
+                <p className="text-gray-500 text-base leading-relaxed line-clamp-5">
                   Xitoyning Dobot startapi Atom nomli humanoid robot yordamchini
                   taqdim etdi, deb xabar beradi Kyodo News. Dobot robotning
                   avtonom faoliyatiga oid bir nechta roliklar bilan bo‘lishdi.
