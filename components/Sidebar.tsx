@@ -1,3 +1,4 @@
+'use client'
 import { Activity, Baby, Calendar, ChevronDown, ChevronRight, ChevronUp, Divide, Files, Home, Inbox, Key, Search, Settings, User2, UtensilsCrossed } from "lucide-react"
 import {
   Sidebar,
@@ -26,6 +27,8 @@ import {
   CollapsibleContent,
 } from "@/components/ui/collapsible"
 import Link from "next/link"
+import { signOut, useSession } from "next-auth/react"
+import React from "react"
 
 // Menu items.
 const items = [
@@ -68,6 +71,14 @@ const items = [
 ]
 
 export default function AppSidebar() {
+  const { data: session, status } = useSession();
+
+  React.useEffect(() => {
+    if (status === 'unauthenticated') {
+      if(session) signOut();
+    }
+  }, [status, session]); 
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -126,29 +137,31 @@ export default function AppSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> Palonchi Palonchiev
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className="w-[--radix-popper-anchor-width]"
-              >
-                <DropdownMenuItem>
-                  <Link href="/profile" passHref className="w-full">
-                    <span>Shaxsiy kabinet</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-red-500">
-                  <span>Chiqish</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
+          { 
+            session?.user && <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <User2 /> {session?.user.email}
+                    <ChevronUp className="ml-auto" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className="w-[--radix-popper-anchor-width]"
+                >
+                  <DropdownMenuItem>
+                    <Link href="/profile" passHref className="w-full">
+                      <span>Shaxsiy kabinet</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => signOut()} className="text-red-500">
+                    <span>Chiqish</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          }
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

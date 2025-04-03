@@ -1,22 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
+import { toast } from "react-toastify";
+import { useRouter, redirect, useSearchParams } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+
+
 
 const Login = () => {
   const [form, setForm] = useState({
-    emailOrPhone: "",
-    password: "",
+    emailOrPhone: "miraziz719@gmail.com",
+    password: "sadssaddas",
   });
+  const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter()
+  const {status} = useSession()
+  const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  if(status === 'authenticated') redirect(callbackUrl);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login ma'lumotlari:", form);
+    setLoading(true)
+
+    const res = await signIn("credentials", {
+      email: form.emailOrPhone,
+      password: form.password,
+      redirect: false,
+    })
+
+    if (res?.error) {
+      toast.error(res.error)
+    }
+    setLoading(false)
   };
 
   return (
@@ -70,10 +94,15 @@ const Login = () => {
             </a>
           </div>
           <button
+            disabled={loading}
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex justify-center items-center"
           >
-            Kirish
+            {
+              loading 
+                ? <Loader2 className="animate-spin" />
+                : "Kirish"
+              }
           </button>
         </form>
         <div className="flex items-center my-2">

@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useRouter, redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const {status} = useSession()
+
+  if(status === 'authenticated') redirect('/');
 
   const [form, setForm] = useState({
     firstName: "",

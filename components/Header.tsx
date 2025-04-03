@@ -5,7 +5,10 @@ import { Sun, Moon, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useSession } from "next-auth/react";
+
 
 const breadcrumbNames: { [key: string]: string } = {
   content: "Bloglar",
@@ -15,6 +18,8 @@ const breadcrumbNames: { [key: string]: string } = {
 
 export default function Header() {
   const { theme, setTheme } = useTheme(); 
+  const router = useRouter()
+  const { data: session, status } = useSession();
 
   const pathname = usePathname(); // Joriy yo‘lni olish: "/products/laptops/dell"
   const pathSegments = pathname.split("/").filter((segment) => segment); // ['products', 'laptops', 'dell']
@@ -56,6 +61,22 @@ export default function Header() {
         >
           {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
         </Button>
+
+        {
+          session?.user 
+          ?
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>{ session?.user?.email }</AvatarFallback>
+          </Avatar>
+          :
+          <Button
+            onClick={() => router.push('/auth/login')}
+          >
+            Kirish 
+          </Button>
+        }
+
       </div>
     </header>
   );
