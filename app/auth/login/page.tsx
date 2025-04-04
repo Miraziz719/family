@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
-import { useRouter, redirect, useSearchParams } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 
+interface LoginPageProps {
+  searchParams: { [key: string]: string | undefined }
+}
 
-const Login = () => {
+const Login = ({ searchParams }: LoginPageProps) => {
   const [form, setForm] = useState({
     emailOrPhone: "miraziz719@gmail.com",
     password: "sadssaddas",
@@ -17,9 +20,10 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter()
   const {status} = useSession()
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl = searchParams.callbackUrl || "/";
+  // const callbackUrl = searchParams.get("callbackUrl") || "/";
   if(status === 'authenticated') redirect(callbackUrl);
 
 
