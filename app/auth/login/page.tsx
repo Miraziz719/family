@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
-import { useRouter, redirect, useSearchParams } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 
@@ -14,18 +14,17 @@ const Login = () => {
   });
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter()
   const {status} = useSession()
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
+  // searchParams.get("callbackUrl") ||
+  const callbackUrl = "/";
+  if(status === 'authenticated') redirect(callbackUrl);
 
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-  // if(status === 'authenticated') redirect(callbackUrl);
-
-  React.useEffect(() => {
-    if (status === "authenticated") {
-      router.push(callbackUrl); // ❗ server-side redirect o'rniga client push
-    }
-  }, [status, callbackUrl, router]);
+  // React.useEffect(() => {
+  //   if (status === "authenticated") {
+  //     router.push(callbackUrl); // ❗ server-side redirect o'rniga client push
+  //   }
+  // }, [status, callbackUrl, router]);
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
