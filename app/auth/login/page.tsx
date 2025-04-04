@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { toast } from "react-toastify";
-import { useRouter, redirect } from "next/navigation";
+import { useRouter, redirect, useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 
-interface LoginPageProps {
-  searchParams?: { [key: string]: string | string[] | undefined }
-}
-
-const Login = ({ searchParams }: LoginPageProps) => {
+const Login = () => {
   const [form, setForm] = useState({
     emailOrPhone: "miraziz719@gmail.com",
     password: "sadssaddas",
@@ -20,14 +16,16 @@ const Login = ({ searchParams }: LoginPageProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter()
   const {status} = useSession()
-  // const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
-  let callbackUrl = searchParams?.callbackUrl || "/";
-  if (Array.isArray(callbackUrl)) {
-    callbackUrl = callbackUrl[0]; // birinchi qiymatni olamiz
-  }
-  // const callbackUrl = searchParams.get("callbackUrl") || "/";
-  if(status === 'authenticated') redirect(callbackUrl);
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  // if(status === 'authenticated') redirect(callbackUrl);
+
+  React.useEffect(() => {
+    if (status === "authenticated") {
+      router.push(callbackUrl); // ❗ server-side redirect o'rniga client push
+    }
+  }, [status, callbackUrl, router]);
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
