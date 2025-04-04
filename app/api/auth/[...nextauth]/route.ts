@@ -17,7 +17,6 @@ const authOptions: NextAuthOptions = {
             email: credentials?.email,
             password: credentials?.password,
           });
-
           if (res.data.access) {
             return {
               id: String(res.data.user.pk),
@@ -41,7 +40,6 @@ const authOptions: NextAuthOptions = {
         token.refreshToken = user.refreshToken;
         token.accessTokenExpires = Date.now() + 1000 * 60 * 15;
       }
-
       if (Date.now() >= token.accessTokenExpires) {
         return await refreshAccessToken(token);
       }
@@ -79,29 +77,6 @@ async function refreshAccessToken(token: any) {
     return { ...token, error: "RefreshTokenExpired" };
   }
 }
-
-
-// // GET metodini eksport qilish
-// export async function GET(request: Request) {
-//   return NextAuth(request); // faqat request yuborish kerak
-// }
-
-// // POST metodini eksport qilish
-// export async function POST(request: Request) {
-//   return NextAuth(request); // faqat request yuborish kerak
-// }
-
-// GET metodini eksport qilish
-// export async function GET(request: Request) {
-//   return NextAuth({ ...authOptions }); // NextRequest bilan chaqirish
-// }
-
-// // POST metodini eksport qilish
-// export async function POST(request: Request) {
-//   return NextAuth({ ...authOptions }); // NextRequest bilan chaqirish
-// }
-
-// export default NextAuth(authOptions)
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
