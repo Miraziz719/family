@@ -1,7 +1,7 @@
 import axios from "axios";
 import { signOut, getSession } from "next-auth/react";
 
-const API_URL = process.env.API_URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -43,6 +43,7 @@ axiosInstance.interceptors.response.use(
 
         // 🔹 Yangilangan token bilan so‘rovni qaytadan yuborish
         originalRequest.headers.Authorization = `Bearer ${session.accessToken}`;
+
         return axiosInstance(originalRequest);
       } catch (err) {
         console.error("Sessiya yangilash ishlamadi, logout qilinmoqda:", err);

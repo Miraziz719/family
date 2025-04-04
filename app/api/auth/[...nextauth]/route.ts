@@ -17,18 +17,30 @@ const authOptions: NextAuthOptions = {
             email: credentials?.email,
             password: credentials?.password,
           });
-          if (res.data.access) {
-            return {
-              id: String(res.data.user.pk),
-              email: res.data.user.email,
-              accessToken: res.data.access,
-              refreshToken: res.data.refresh,
-            };
+      
+          return {
+            id: String(res.data.user.pk),
+            email: res.data.user.email,
+            accessToken: res.data.access,
+            refreshToken: res.data.refresh,
+          };
+        } catch (err: any) {
+          let errorMessage = "Noma'lum xatolik yuz berdi";
+          
+          if (err.response?.data) {
+            const errorData = err.response.data;
+      
+            if (typeof errorData === "string") {
+              errorMessage = errorData;
+            } else if (errorData.detail) {
+              errorMessage = errorData.detail;
+            } else if (typeof errorData === "object") {
+              errorMessage = Object.values(errorData).flat().join(" ");
+            }
+          } else if (err.message) {
+            errorMessage = err.message;
           }
-          throw new Error(res.data);
-
-        } catch (error: any) {
-          throw new Error(error);
+          throw new Error(errorMessage);
         }
       },
     }),

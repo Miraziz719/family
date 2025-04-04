@@ -20,13 +20,6 @@ const Login = () => {
   const callbackUrl = "/";
   if(status === 'authenticated') redirect(callbackUrl);
 
-  // React.useEffect(() => {
-  //   if (status === "authenticated") {
-  //     router.push(callbackUrl); // ❗ server-side redirect o'rniga client push
-  //   }
-  // }, [status, callbackUrl, router]);
-
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -40,8 +33,7 @@ const Login = () => {
       password: form.password,
       redirect: false,
     })
-
-    if (res?.error) {
+    if(res?.error) {
       toast.error(res.error)
     }
     setLoading(false)

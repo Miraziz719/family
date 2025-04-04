@@ -1,13 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { useRouter, redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
+import axiosInstance from "@/lib/axiosInstance"
+// import axios from "axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false)
   const {status} = useSession()
+  const router = useRouter()
 
   if(status === 'authenticated') redirect('/');
 
@@ -22,9 +27,24 @@ const Register = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Ro‘yxatdan o‘tish ma'lumotlari:", form);
+    setLoading(true)
+
+    await axiosInstance.post("/auth/registration/",{
+      email: form.emailOrPhone,
+      password1: form.password,
+      password2: form.password,
+    })
+      .then((res) => {
+        toast.success(res.data.detail)
+        router.push('/auth/login')
+      })
+      .catch((err) => {
+        const key = Object.keys(err.response.data)[0]
+        toast.error(err.response.data[key]?.[0] || err.message)
+      })
+      .finally(() => setLoading(false)) 
   };
 
   return (
@@ -97,10 +117,15 @@ const Register = () => {
           </div>
           
           <button
+            disabled={loading}
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex justify-center items-center"
           >
-            Ro‘yxatdan o‘tish
+            {
+              loading 
+                ? <Loader2 className="animate-spin" />
+                : "Ro‘yxatdan o‘tish"
+            }
           </button>
         </form>
         <div className="flex items-center my-2">
