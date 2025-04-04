@@ -8,7 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 
 
 interface LoginPageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
 const Login = ({ searchParams }: LoginPageProps) => {
@@ -22,7 +22,7 @@ const Login = ({ searchParams }: LoginPageProps) => {
   const {status} = useSession()
   // const searchParams = useSearchParams();
 
-  let callbackUrl = searchParams.callbackUrl || "/";
+  let callbackUrl = searchParams?.callbackUrl || "/";
   if (Array.isArray(callbackUrl)) {
     callbackUrl = callbackUrl[0]; // birinchi qiymatni olamiz
   }
