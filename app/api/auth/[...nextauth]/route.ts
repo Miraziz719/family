@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import axios from "@/lib/axiosInstance";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -79,6 +79,29 @@ async function refreshAccessToken(token: any) {
     return { ...token, error: "RefreshTokenExpired" };
   }
 }
+
+
+// // GET metodini eksport qilish
+// export async function GET(request: Request) {
+//   return NextAuth(request); // faqat request yuborish kerak
+// }
+
+// // POST metodini eksport qilish
+// export async function POST(request: Request) {
+//   return NextAuth(request); // faqat request yuborish kerak
+// }
+
+// GET metodini eksport qilish
+// export async function GET(request: Request) {
+//   return NextAuth({ ...authOptions }); // NextRequest bilan chaqirish
+// }
+
+// // POST metodini eksport qilish
+// export async function POST(request: Request) {
+//   return NextAuth({ ...authOptions }); // NextRequest bilan chaqirish
+// }
+
+// export default NextAuth(authOptions)
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
