@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, {Session} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import axios from "@/lib/axiosInstance";
@@ -48,6 +48,7 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        token.id = user.id
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.accessTokenExpires = Date.now() + 1000 * 60 * 15;
@@ -59,8 +60,14 @@ const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      if(!token.accessToken) {
+        return {} as Session;
+      }
+
+      session.user.id = token.id
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
+
       return session;
     },
   },
@@ -86,7 +93,7 @@ async function refreshAccessToken(token: any) {
     };
   } catch (error) {
     console.error("Refresh token eskirgan, logout qilinmoqda!");
-    return { ...token, error: "RefreshTokenExpired" };
+    return {};
   }
 }
 
