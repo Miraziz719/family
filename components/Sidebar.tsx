@@ -29,6 +29,8 @@ import {
 import Link from "next/link"
 import { signOut, useSession } from "next-auth/react"
 import React from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { useProfileStore } from "@/store/profileStore"
 
 // Menu items.
 const items = [
@@ -72,6 +74,7 @@ const items = [
 
 export default function AppSidebar() {
   const { data: session, status } = useSession();
+  const {profile} = useProfileStore();
 
   React.useEffect(() => {
     if (status === 'unauthenticated') {
@@ -142,7 +145,11 @@ export default function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
-                    <User2 /> {session?.user.email}
+                    <User2 />
+                    {
+                      (profile.firstName && profile.firstName + ' ' + profile.lastName) || 
+                      session?.user.email
+                    }
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>

@@ -9,16 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "react-toastify";
+import { useProfileStore, userTypes } from "@/store/profileStore";
 
-
-const userTypes = [
-  {value: "guest", label: 'Foydalanuvchi'},
-  {value: "mother", label: 'Ona'},
-  {value: "bride", label: 'Kelin'},
-  {value: "girl", label: 'Qiz'},
-  {value: "doctor", label: 'Shifokor'},
-  {value: "admin", label: 'Admin'},
-]
 
 const defaultProfile = {
   profileId: "",
@@ -50,33 +42,12 @@ function mergeAndSanitize(user: any, profile: any) {
 
 const page = () => {
   const { data, status } = useSession()
-
-  const [formData, setFormData] = useState(defaultProfile);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if(status === 'loading') return
-    async function fetchData() {
-      try {
-        const [userRes, profileRes] = await Promise.all([
-          axios.get("/auth/user/"),
-          axios.get(`/profile/profiles/1/`), // → backend api da kamchilik bor user id dan olish kerak
-        ]);
-
-        const merged = mergeAndSanitize(userRes.data, profileRes.data);
-        setFormData(merged);
-      } catch (err) {
-        console.error("Error fetching data", err);
-      }
-    }
-
-    
-    fetchData();
-  }, []);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const { profile: formData, setProfile, loadProfileFromAPI } = useProfileStore();
   
   const handleChange = (key: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+    setProfile({ [key]: value });
   };
 
   const handleSubmit = async () => {
@@ -106,6 +77,7 @@ const page = () => {
       });
 
       toast.success("Muvaffaqiyatli yangilandi!");
+      loadProfileFromAPI('1')
     } catch (err) {
       console.error("Update failed", err);
     } finally {

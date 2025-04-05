@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Sun, Moon, ChevronRight } from "lucide-react";
+import { Sun, Moon, ChevronRight, User2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSession } from "next-auth/react";
+import { useProfileStore } from "@/store/profileStore";
+import { useEffect } from "react";
 
 
 const breadcrumbNames: { [key: string]: string } = {
@@ -20,14 +22,20 @@ export default function Header() {
   const { theme, setTheme } = useTheme(); 
   const router = useRouter()
   const { data: session, status } = useSession();
+  const {profile, loadProfileFromAPI} = useProfileStore();
 
   const pathname = usePathname(); // Joriy yo‘lni olish: "/products/laptops/dell"
   const pathSegments = pathname.split("/").filter((segment) => segment); // ['products', 'laptops', 'dell']
 
   const label = (segment: string) => breadcrumbNames[segment] || decodeURIComponent(segment);
 
+  useEffect(() => {
+    if(status === 'loading') return
+    loadProfileFromAPI('1') // data.user.id balenda kamchilik
+  }, [status]);
+
   return (
-    <header className="bg-background border-b sticky top-0">
+    <header className="bg-background border-b sticky top-0 z-10">
       <div className="flex items-center gap-4 p-4">
         <SidebarTrigger className="hidden md:block" />
 
@@ -66,8 +74,8 @@ export default function Header() {
           session?.user 
           ?
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>{ session?.user?.email }</AvatarFallback>
+            <AvatarImage src={profile.avatar} />
+            <AvatarFallback><User2/></AvatarFallback>
           </Avatar>
           :
           <Button

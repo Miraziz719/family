@@ -51,7 +51,7 @@ const authOptions: NextAuthOptions = {
         token.id = user.id
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.accessTokenExpires = Date.now() + 1000 * 60 * 15;
+        token.accessTokenExpires = Date.now() + 1000 * 60 * 1;
       }
       if (Date.now() >= token.accessTokenExpires) {
         return await refreshAccessToken(token);
@@ -89,7 +89,7 @@ async function refreshAccessToken(token: any) {
       ...token,
       accessToken: data.access,
       refreshToken: data.refresh,
-      accessTokenExpires: data.access_expiration || Date.now() + 1000 * 60 * 15, // 15 daqiqa
+      accessTokenExpires: data.access_expiration || Date.now() + 1000 * 60 * 1,
     };
   } catch (error) {
     console.error("Refresh token eskirgan, logout qilinmoqda!");
