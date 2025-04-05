@@ -46,7 +46,7 @@ const page = () => {
       });
 
       toast.success("Muvaffaqiyatli yangilandi!");
-      loadProfileFromAPI('1')
+      loadProfileFromAPI()
     } catch (err) {
       console.error("Update failed", err);
     } finally {
