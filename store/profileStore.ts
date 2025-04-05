@@ -1,4 +1,3 @@
-// store/profileStore.ts
 import { create } from "zustand";
 import axios from "@/lib/axiosInstance";
 
@@ -28,7 +27,7 @@ type ProfileStore = {
   profile: Profile;
   setProfile: (data: Partial<Profile>) => void;
   resetProfile: () => void;
-  loadProfileFromAPI: (id: string) => Promise<void>;
+  loadProfileFromAPI: () => Promise<void>;
 };
 
 const defaultProfile: Profile = {
@@ -69,24 +68,20 @@ export const useProfileStore = create<ProfileStore>((set) => ({
 
   resetProfile: () => set({ profile: defaultProfile }),
 
-  loadProfileFromAPI: async (userId: string) => {
+  loadProfileFromAPI: async () => {
     try {
-      try {
-        const [userRes, profileRes] = await Promise.all([
-          axios.get("/auth/user/"),
-          axios.get(`/profile/profiles/${userId}/`), // → backend api da kamchilik bor user id dan olish kerak
-        ]);
+      const [userRes, profileRes] = await Promise.all([
+        axios.get("/auth/user/"),
+        axios.get(`/profiles/profile/me/`)
+      ]);
 
-        const merged = mergeAndSanitize(userRes.data, profileRes.data);
-        set(() => ({
-          profile: merged
-        }));
+      const merged = mergeAndSanitize(userRes.data, profileRes.data);
+      set(() => ({
+        profile: merged
+      }));
 
-      } catch (err) {
-        console.error("Error fetching data", err);
-      }
     } catch (err) {
-      console.error("Profilni yuklashda xatolik:", err);
+      console.error("Error fetching data", err);
     }
   },
 }));

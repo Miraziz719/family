@@ -31,6 +31,7 @@ import { signOut, useSession } from "next-auth/react"
 import React from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { useProfileStore } from "@/store/profileStore"
+import { useRouter } from "next/navigation"
 
 // Menu items.
 const items = [
@@ -39,9 +40,9 @@ const items = [
     url: "#",
     icon: Files,
     children: [
-      {title: 'Shaxsiy', url: '/content'},
-      {title: 'Tibbiy', url: '/content'},
-      {title: 'Boshqa', url: '/content'},
+      {title: 'Shaxsiy', url: '/document/personal'},
+      {title: 'Tibbiy', url: '/document/medical'},
+      {title: 'Boshqa', url: '/document/other'},
     ]
   },
   {
@@ -75,6 +76,7 @@ const items = [
 export default function AppSidebar() {
   const { data: session, status } = useSession();
   const {profile} = useProfileStore();
+  const router = useRouter()
 
   React.useEffect(() => {
     if (status === 'unauthenticated') {
@@ -157,10 +159,8 @@ export default function AppSidebar() {
                   side="top"
                   className="w-[--radix-popper-anchor-width]"
                 >
-                  <DropdownMenuItem>
-                    <Link href="/profile" passHref className="w-full">
+                  <DropdownMenuItem onClick={() => router.push('/profile')}>
                       <span>Shaxsiy kabinet</span>
-                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => signOut()} className="text-red-500">
                     <span>Chiqish</span>

@@ -1,7 +1,6 @@
 "use client";
-import { useSession } from "next-auth/react"
 import axios from "@/lib/axiosInstance"
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -11,37 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "react-toastify";
 import { useProfileStore, userTypes } from "@/store/profileStore";
 
-
-const defaultProfile = {
-  profileId: "",
-  email: "",
-  firstName: "",
-  lastName: "",
-  phone: "",
-  avatar: "",
-  avatarFile: null,
-  bio: "",
-  birthday: "",
-  userType: "user",
-};
-
-function mergeAndSanitize(user: any, profile: any) {
-  return {
-    email: user?.email ?? "",
-    firstName: user?.first_name ?? "",
-    lastName: user?.last_name ?? "",
-    profileId: profile.id,
-    phone: profile?.phone ?? "",
-    avatar: profile?.avatar ?? "",
-    avatarFile: null,
-    bio: profile?.bio ?? "",
-    birthday: profile?.birthday ?? "",
-    userType: profile?.user_type ?? "user",
-  };
-}
-
 const page = () => {
-  const { data, status } = useSession()
   const [loading, setLoading] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const { profile: formData, setProfile, loadProfileFromAPI } = useProfileStore();
@@ -85,10 +54,8 @@ const page = () => {
     }
   };
 
-
   return (
     <div className="max-w-2xl mx-auto space-y-6 p-4 pb-10">
-      {/* 🟦 Shaxsiy ma'lumotlar */}
       <Card>
         <CardContent className="space-y-4 p-6">
           <h2 className="text-lg font-semibold">👤 Shaxsiy ma'lumotlar</h2>
@@ -118,7 +85,6 @@ const page = () => {
         </CardContent>
       </Card>
 
-      {/* 🟩 Profil sozlamalari */}
       <Card>
         <CardContent className="space-y-4 p-6">
           <h2 className="text-lg font-semibold">⚙️ Profil sozlamalari</h2>

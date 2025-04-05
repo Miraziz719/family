@@ -24,15 +24,14 @@ export default function Header() {
   const { data: session, status } = useSession();
   const {profile, loadProfileFromAPI} = useProfileStore();
 
-  const pathname = usePathname(); // Joriy yo‘lni olish: "/products/laptops/dell"
-  const pathSegments = pathname.split("/").filter((segment) => segment); // ['products', 'laptops', 'dell']
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/").filter((segment) => segment);
 
   const label = (segment: string) => breadcrumbNames[segment] || decodeURIComponent(segment);
 
   useEffect(() => {
-    if(status === 'loading') return
-    loadProfileFromAPI('1') // data.user.id balenda kamchilik
-  }, [status]);
+    loadProfileFromAPI()
+  }, []);
 
   return (
     <header className="bg-background border-b sticky top-0 z-10">
@@ -45,7 +44,7 @@ export default function Header() {
         <nav className="flex items-center space-x-2 text-sm text-gray-500">
           <Link href="/" className="text-black hover:text-gray-700 font-bold">FamilyApp</Link>
           {pathSegments.map((segment, index) => {
-            const href = "/" + pathSegments.slice(0, index + 1).join("/"); // Har bir segment uchun URL yaratish
+            const href = "/" + pathSegments.slice(0, index + 1).join("/");
             const isLast = index === pathSegments.length - 1;
             return (
               <div key={index} className="flex items-center">
