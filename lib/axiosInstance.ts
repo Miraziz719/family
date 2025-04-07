@@ -25,6 +25,7 @@ axiosInstance.interceptors.request.use(async (config) => {
 axiosInstance.interceptors.response.use(
   (response) => response, // ✅ Agar muvaffaqiyatli bo‘lsa, javobni qaytaramiz
   async (error) => {
+    console.log('called axios intance error')
     const originalRequest = error.config;
 
     // 🔺 401 yoki 403 xatolarda sessiyani yangilash
@@ -47,7 +48,6 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (err) {
         console.error("Sessiya yangilash ishlamadi, logout qilinmoqda:", err);
-        signOut();
         return Promise.reject(err);
       }
     }

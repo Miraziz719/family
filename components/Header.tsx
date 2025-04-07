@@ -30,8 +30,9 @@ export default function Header() {
   const label = (segment: string) => breadcrumbNames[segment] || decodeURIComponent(segment);
 
   useEffect(() => {
+    if(status === 'loading' || !session?.user) return
     loadProfileFromAPI()
-  }, []);
+  }, [status]);
 
   return (
     <header className="bg-background border-b sticky top-0 z-10">

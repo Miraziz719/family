@@ -34,7 +34,7 @@ const page = () => {
         form.append("avatar", avatarFile);
       }
 
-      await axios.put(`/profile/profiles/${formData.profileId}/`, form, {
+      await axios.put(`/profiles/profile/${formData.profileId}/`, form, {
         headers: {
           "Content-Type": "multipart/form-data"
         },

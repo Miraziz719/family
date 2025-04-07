@@ -53,7 +53,8 @@ const authOptions: NextAuthOptions = {
         token.refreshToken = user.refreshToken;
         token.accessTokenExpires = Date.now() + 1000 * 60 * 1;
       }
-      if (Date.now() >= token.accessTokenExpires) {
+
+      if (Date.now() >= new Date(token.accessTokenExpires).getTime()) {
         return await refreshAccessToken(token);
       }
 
@@ -63,7 +64,6 @@ const authOptions: NextAuthOptions = {
       if(!token.accessToken) {
         return {} as Session;
       }
-
       session.user.id = token.id
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
@@ -78,9 +78,9 @@ const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-// 🔹 Access tokenni refresh qilish funksiyasi
 async function refreshAccessToken(token: any) {
   try {
+    console.log('called refresh token')
     const { data } = await axios.post("/auth/token/refresh", {
       refresh: token.refreshToken,
     });
