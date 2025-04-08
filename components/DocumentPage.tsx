@@ -1,23 +1,12 @@
 'use client'
 
-import { FC, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { FC, useState } from "react";
 import { useDocumentStore, isImage, isPDF } from "@/store/documentStore";
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import DocumentDialog from "@/components/dialogs/document"
 
 type Props = {
   category: string;
@@ -25,26 +14,18 @@ type Props = {
 };
 
 const DocumentPage: FC<Props> = ({ category, categoryId }) => {
+  const [open, setOpen] = useState(false);
   const { loading, getDocumentByCategory} = useDocumentStore()
   const documents = getDocumentByCategory(categoryId)
-
-
-  const [file, setFile] = useState<File | null>(null);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [category1, setCategory] = useState("");
-
 
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-6 capitalize">{category} hujjatlar</h1>
       {
         loading 
-        ? 
-        <p>Loading.</p>
-        :
-        documents.length === 0 && (
-          <p>Bu kategoriyada hozircha hujjatlar yo‘q.</p>
+        ? <p className="mb-4">Loading.</p>
+        : documents.length === 0 && (
+          <p className="mb-4">Bu kategoriyada hozircha hujjatlar yo‘q.</p>
         )
       }
 
@@ -89,57 +70,11 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
         
           </div>
         ))}
-        <Dialog>
-          <DialogTrigger asChild>
-            <div className="border-dashed border-2 rounded-lg min-h-48 h-full flex items-center justify-center text-center text-gray-500 cursor-pointer hover:bg-gray-50 transition">
-              <span className="text-3xl">➕</span>
-            </div>
-          </DialogTrigger>
+        {/* <div onClick={() => setOpen(true)} className="border-dashed border-2 rounded-lg min-h-48 h-full flex items-center justify-center text-center text-gray-500 cursor-pointer hover:bg-gray-50 transition">
+          <span className="text-3xl">➕</span>
+        </div> */}
 
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Yangi hujjat qo‘shish</DialogTitle>
-              <DialogDescription>PDF yoki rasim yuklang, nom va tavsif kiriting</DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4">
-              <div>
-                <Label>Fayl (PDF yoki rasm)</Label>
-                <Input type="file" accept=".pdf,image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-              </div>
-
-              <div>
-                <Label>Nomi</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Hujjat nomi" />
-              </div>
-
-              <div>
-                <Label>Tavsif</Label>
-                <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Izoh..." />
-              </div>
-
-              <div>
-                <Label>Kategoriya</Label>
-                <Select value={category1} onValueChange={setCategory}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Kategoriya tanlang" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="shaxsiy">Shaxsiy</SelectItem>
-                    <SelectItem value="tibbiy">Tibbiy</SelectItem>
-                    <SelectItem value="boshqa">Boshqa</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <DialogFooter className="mt-4">
-              <Button disabled={!file || !name || !category}>
-                Qo‘shish
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <DocumentDialog open={open} onOpenChange={setOpen} />
       </div>
     </div>
   );
