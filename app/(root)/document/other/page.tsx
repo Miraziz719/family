@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import DocumentPage from "@/components/DocumentPage";
+import DocumentPage from "@/components/DocumentList";
 import { useDocumentStore } from "@/store/documentStore";
 
 const page = () => {

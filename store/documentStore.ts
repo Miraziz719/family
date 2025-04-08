@@ -5,7 +5,7 @@ type document = {
   id: string;
   name: string;
   description: string;
-  image: string;
+  file: string;
   imageFile: File | null;
   category_id: string;
   user: string;
@@ -27,8 +27,8 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
   },
 
   fetchDocuments: async () => {
-    const { documents } = get();
-    if (documents.length) return;
+    // const { documents } = get();
+    // if (documents.length) return;
 
     set({ loading: true })
     axios.get(`/profiles/documents/`)
@@ -42,6 +42,5 @@ export const useDocumentStore = create<DocumentStore>((set, get) => ({
   },
 }));
 
-export const isImage = (filename: string) =>
-  /\.(jpg|jpeg|png|gif)$/i.test(filename);
+export const isImage = (filename: string) => /\.(jpg|jpeg|png|gif)$/i.test(filename);
 export const isPDF = (filename: string) => /\.pdf$/i.test(filename);

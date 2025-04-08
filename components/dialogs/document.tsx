@@ -17,27 +17,55 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import axios from "@/lib/axiosInstance";
+import { toast } from "react-toastify";
 
-
-type Props = {
-  category: string;
-  categoryId: string;
-};
-
-const DocumentDialog = ({ open, onOpenChange }: { open: boolean, onOpenChange: (val: boolean) => void }) => {
+const DocumentDialog = ({ 
+  open, 
+  categoryId,
+  onOpenChange 
+}: { 
+  open: boolean, 
+  categoryId: string,
+  onOpenChange: (val: boolean) => void 
+}) => {
+  const [loading, setLoading] = useState(false)
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [category1, setCategory] = useState("");
+  const [category, setCategory] = useState(categoryId);
 
+  const { fetchDocuments } = useDocumentStore()
+
+  async function onsubmit() {
+    if (!file || !name || !category) return;
+  
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("file", file);
+    formData.append("category_id", category);
+  
+    setLoading(true)
+    try {
+      await axios.post("/profiles/documents/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      onOpenChange(false)
+      toast.success("Muvaffaqiyatli qo'shildi!");
+      fetchDocuments()
+    } catch (err: any) {
+      const key = Object.keys(err.response.data)[0]
+      toast.error(err.response.data[key]?.[0] || err.message)
+    }
+    setLoading(false)
+  }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className="border-dashed border-2 rounded-lg min-h-48 h-full flex items-center justify-center text-center text-gray-500 cursor-pointer hover:bg-gray-50 transition">
-          <span className="text-3xl">➕</span>
-        </div>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
 
       <DialogContent>
         <DialogHeader>
@@ -47,37 +75,37 @@ const DocumentDialog = ({ open, onOpenChange }: { open: boolean, onOpenChange: (
 
         <div className="space-y-4">
           <div>
-            <Label>Fayl (PDF yoki rasm)</Label>
+            <Label className="mb-2">Fayl (PDF yoki rasm)</Label>
             <Input type="file" accept=".pdf,image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
           </div>
 
           <div>
-            <Label>Nomi</Label>
+            <Label className="mb-2">Nomi</Label>
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Hujjat nomi" />
           </div>
 
           <div>
-            <Label>Tavsif</Label>
+            <Label className="mb-2">Tavsif</Label>
             <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Izoh..." />
           </div>
 
           <div>
-            <Label>Kategoriya</Label>
-            <Select value={category1} onValueChange={setCategory}>
+            <Label className="mb-2">Kategoriya</Label>
+            <Select value={category} onValueChange={setCategory}>
               <SelectTrigger>
                 <SelectValue placeholder="Kategoriya tanlang" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="shaxsiy">Shaxsiy</SelectItem>
-                <SelectItem value="tibbiy">Tibbiy</SelectItem>
-                <SelectItem value="boshqa">Boshqa</SelectItem>
+                <SelectItem value="2">Shaxsiy</SelectItem>
+                <SelectItem value="3">Tibbiy</SelectItem>
+                <SelectItem value="1">Boshqa</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
 
         <DialogFooter className="mt-4">
-          <Button disabled={!file || !name}>
+          <Button loading={loading} disabled={!file || !name} onClick={() => onsubmit()}>
             Qo‘shish
           </Button>
         </DialogFooter>

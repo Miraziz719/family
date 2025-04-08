@@ -7,6 +7,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import DocumentDialog from "@/components/dialogs/document"
+import { toast } from "react-toastify";
+import axiosInstance from "@/lib/axiosInstance";
 
 type Props = {
   category: string;
@@ -15,12 +17,24 @@ type Props = {
 
 const DocumentPage: FC<Props> = ({ category, categoryId }) => {
   const [open, setOpen] = useState(false);
-  const { loading, getDocumentByCategory} = useDocumentStore()
+  const { loading, getDocumentByCategory, fetchDocuments} = useDocumentStore()
   const documents = getDocumentByCategory(categoryId)
+
+  async function deleteDocument(id: string) {
+    try {
+      await axiosInstance.delete(`/profiles/documents/${id}/`);
+      toast.success("Muvaffaqiyatli o'chirildi!");
+      fetchDocuments()
+    } catch (err: any) {
+      const key = Object.keys(err.response.data)[0]
+      toast.error(err.response.data[key]?.[0] || err.message)
+    }
+  }
 
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-6 capitalize">{category} hujjatlar</h1>
+      {/* {JSON.stringify(documents)} */}
       {
         loading 
         ? <p className="mb-4">Loading.</p>
@@ -35,13 +49,13 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
             key={doc.id}
             className="border rounded-lg p-4 h-full shadow-sm bg-white hover:shadow-md transition relative"
           >
-            {isImage(doc.image) ? (
+            {isImage(doc.file) ? (
               <img
-                src={doc.image}
+                src={doc.file}
                 alt={doc.name}
                 className="w-full h-48 object-cover rounded mb-3"
               />
-            ) : isPDF(doc.image) ? (
+            ) : isPDF(doc.file) ? (
               <div className="flex flex-col items-center justify-center h-48 text-center text-gray-500 border border-dashed border-gray-300 rounded mb-3">
                 <span className="text-5xl">📄</span>
                 <p className="mt-2">PDF fayl</p>
@@ -50,10 +64,10 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
               <p className="text-sm text-red-500">Noma'lum fayl turi</p>
             )}
             <p className="text-sm truncate">{doc.name}</p>
-            <p className="text-sm italic text-gray-600">{doc.description}</p>
+            <p className="text-[12px] italic text-gray-600">{doc.description}</p>
             <div className="flex justify-between items-center">
               <a
-                href={doc.image}
+                href={doc.file}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 text-sm hover:underline mt-2 inline-block"
@@ -61,8 +75,8 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
                 Yuklab olish / Ko‘rish
               </a>
               <button
-                onClick={() => {}}
-                className="text-red-500 hover:text-red-700 text-sm"
+                onClick={() => deleteDocument(doc.id)}
+                className="text-red-500 hover:text-red-700 text-sm mt-2"
               >
                 O'chirish
               </button>
@@ -70,11 +84,11 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
         
           </div>
         ))}
-        {/* <div onClick={() => setOpen(true)} className="border-dashed border-2 rounded-lg min-h-48 h-full flex items-center justify-center text-center text-gray-500 cursor-pointer hover:bg-gray-50 transition">
+        <div onClick={() => setOpen(true)} className="border-dashed border-2 rounded-lg min-h-48 h-full flex items-center justify-center text-center text-gray-500 cursor-pointer hover:bg-gray-50 transition">
           <span className="text-3xl">➕</span>
-        </div> */}
+        </div>
 
-        <DocumentDialog open={open} onOpenChange={setOpen} />
+        <DocumentDialog open={open} onOpenChange={setOpen} categoryId={categoryId} />
       </div>
     </div>
   );
