@@ -73,7 +73,7 @@ export default function Header() {
         {
           session?.user 
           ?
-          <Avatar>
+          <Avatar onClick={() => router.push('/profile')}>
             <AvatarImage src={profile.avatar} />
             <AvatarFallback><User2/></AvatarFallback>
           </Avatar>
