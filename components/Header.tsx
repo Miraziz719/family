@@ -45,7 +45,7 @@ export default function Header() {
         <nav className="flex items-center space-x-2 text-sm text-gray-500">
           <Link href="/" className="text-black hover:text-gray-700 font-bold my-[-16px]">
             <Image
-              src={theme === "dark" ? '/logo_dark.png' : '/logo_white.png'}
+              src={theme === "dark" ? '/logo.png' : '/logo_d.png'}
               width={65}
               height={65}
               alt="logo"
