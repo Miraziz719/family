@@ -34,7 +34,6 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-6 capitalize">{category} hujjatlar</h1>
-      {/* {JSON.stringify(documents)} */}
       {
         loading 
         ? <p className="mb-4">Loading.</p>
@@ -47,7 +46,7 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
         {documents.map((doc) => (
           <div
             key={doc.id}
-            className="border rounded-lg p-4 h-full shadow-sm bg-white hover:shadow-md transition relative"
+            className="border rounded-lg p-4 h-full shadow-sm bg-secondary hover:shadow-md transition relative"
           >
             {isImage(doc.file) ? (
               <img
@@ -84,7 +83,7 @@ const DocumentPage: FC<Props> = ({ category, categoryId }) => {
         
           </div>
         ))}
-        <div onClick={() => setOpen(true)} className="border-dashed border-2 rounded-lg min-h-48 h-full flex items-center justify-center text-center text-gray-500 cursor-pointer hover:bg-gray-50 transition">
+        <div onClick={() => setOpen(true)} className="border-dashed border-2 rounded-lg min-h-48 h-full flex items-center justify-center text-center text-gray-500 cursor-pointer hover:bg-secondary transition">
           <span className="text-3xl">➕</span>
         </div>
 

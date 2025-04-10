@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSession } from "next-auth/react";
 import { useProfileStore } from "@/store/profileStore";
 import { useEffect } from "react";
-
+import Image from 'next/image'
 
 const breadcrumbNames: { [key: string]: string } = {
   content: "Bloglar",
@@ -43,7 +43,18 @@ export default function Header() {
           MyApp
         </Link> */}
         <nav className="flex items-center space-x-2 text-sm text-gray-500">
-          <Link href="/" className="text-black hover:text-gray-700 font-bold">FamilyApp</Link>
+          <Link href="/" className="text-black hover:text-gray-700 font-bold my-[-16px]">
+            <Image
+              src={theme === "dark" ? '/logo_dark.png' : '/logo_white.png'}
+              width={65}
+              height={65}
+              alt="logo"
+              className="md:hidden"
+            />
+            <div className={`hidden md:block ${theme === "dark" && 'text-white'}`}>Asosiy</div>
+          </Link>
+
+          
           {pathSegments.map((segment, index) => {
             const href = "/" + pathSegments.slice(0, index + 1).join("/");
             const isLast = index === pathSegments.length - 1;
@@ -51,9 +62,9 @@ export default function Header() {
               <div key={index} className="flex items-center">
                 <ChevronRight className="mx-2 h-4 w-4" />
                 {!isLast ? (
-                  <Link href={href} className="hover:text-gray-900 capitalize">{label(segment)}</Link>
+                  <Link href={href} className="hover:text-gray-800 capitalize">{label(segment)}</Link>
                 ) : (
-                  <span className="text-gray-700 font-semibold capitalize">{label(segment)}</span>
+                  <span className="text-gray-600 font-semibold capitalize">{label(segment)}</span>
                 )}
               </div>
             );
