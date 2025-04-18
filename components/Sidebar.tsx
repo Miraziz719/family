@@ -32,6 +32,8 @@ import React from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { useProfileStore } from "@/store/profileStore"
 import { useRouter } from "next/navigation"
+import Image from 'next/image'
+import { useTheme } from "next-themes"
 
 // Menu items.
 const items = [
@@ -74,6 +76,7 @@ const items = [
 ]
 
 export default function AppSidebar() {
+  const { theme, setTheme } = useTheme(); 
   const { data: session, status } = useSession();
   const {profile} = useProfileStore();
   const router = useRouter()
@@ -88,8 +91,13 @@ export default function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <Link href="/" className="text-xl font-bold px-2 py-3">
-            FamilyApp
+          <Link href="/" className="text-black hover:text-gray-700 font-bold mx-auto">
+            <Image
+              src={theme === "dark" ? '/logo.png' : '/logo_d.png'}
+              width={100}
+              height={100}
+              alt="logo"
+            />
           </Link>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>

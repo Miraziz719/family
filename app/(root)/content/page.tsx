@@ -24,13 +24,15 @@ const Page = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postsRes = await axiosInstance.get<{ results: Post[] }>("/blogs/posts/");
-        const imagesRes = await axiosInstance.get<{ results: any[] }>("/blogs/postimages/");
+        const postsRes = await axiosInstance.get<{ results: Post[] }>(
+          "/blogs/posts/"
+        );
+        const imagesRes = await axiosInstance.get<{ results: any[] }>(
+          "/blogs/postimages/"
+        );
 
         const postsData = postsRes.data.results;
         const imagesData = imagesRes.data.results;
@@ -56,7 +58,7 @@ const Page = () => {
     fetchData();
   }, []);
 
-  if (loading) return <p>Yuklanmoqda...</p>;
+  if (loading) return <p>Loading...</p>;
 
   const firstPost = posts[0];
   console.log("Posts:", posts);
@@ -108,13 +110,10 @@ const Page = () => {
                 </div>
               </div>
             )}
-            
-             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {otherPosts.map((post) => (
-                <div
-                  key={post.id}
-                  className="space-y-2 cursor-pointer group"
-                >
+                <div key={post.id} className="space-y-2 cursor-pointer group">
                   <div className="overflow-hidden rounded-xl">
                     {post.image ? (
                       <Image
@@ -130,7 +129,9 @@ const Page = () => {
                       </div>
                     )}
                   </div>
-                  <div className="text-gray-500 text-sm">23:34 / 26.03.2025</div>
+                  <div className="text-gray-500 text-sm">
+                    23:34 / 26.03.2025
+                  </div>
                   <h3 className="font-medium text-base leading-snug group-hover:text-blue-500 duration-100">
                     {post.title}
                   </h3>
@@ -140,19 +141,20 @@ const Page = () => {
           </div>
 
           <div className="w-full lg:w-[350px] space-y-4">
-  <h3 className="text-xl font-bold border-b pb-2">So‘nggi yangiliklar</h3>
+            <h3 className="text-xl font-bold border-b pb-2">
+              So‘nggi yangiliklar
+            </h3>
 
-  {posts.slice(0, 4).map((post) => (
-    <div key={post.id} className="border-b pb-2">
-      <h4 className="font-medium">{post.title}</h4>
-      <span className="text-sm text-gray-500">
-        {/* Kategoriya backenddan bo‘lsa alohida qo‘shiladi, hozircha faqat vaqt */}
-        {formatDate(post.published_at)}
-      </span>
-    </div>
-  ))}
-</div>
-
+            {posts.slice(0, 4).map((post) => (
+              <div key={post.id} className="border-b pb-2">
+                <h4 className="font-medium">{post.title}</h4>
+                <span className="text-sm text-gray-500">
+                  {/* Kategoriya backenddan bo‘lsa alohida qo‘shiladi, hozircha faqat vaqt */}
+                  {formatDate(post.published_at)}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
