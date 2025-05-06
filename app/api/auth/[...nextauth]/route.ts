@@ -51,12 +51,12 @@ const authOptions: NextAuthOptions = {
         token.id = user.id
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
-        token.accessTokenExpires = Date.now() + 1000 * 60 * 1;
+        token.accessTokenExpires = Date.now() + 1000 * 60 * 30;
       }
 
-      if (Date.now() >= new Date(token.accessTokenExpires).getTime()) {
-        return await refreshAccessToken(token);
-      }
+      // if (Date.now() >= new Date(token.accessTokenExpires).getTime()) {
+      //   return await refreshAccessToken(token);
+      // }
 
       return token;
     },

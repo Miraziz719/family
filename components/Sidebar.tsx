@@ -83,7 +83,7 @@ export default function AppSidebar() {
 
   React.useEffect(() => {
     if (status === 'unauthenticated') {
-      if(session) signOut();
+      signOut();
     }
   }, [status, session]); 
 
