@@ -1,8 +1,7 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import ContentImg from "../../assets/images/content.jpg";
-import axios from "axios";
 import axiosInstance from "@/lib/axiosInstance";
 
 const Page = () => {
@@ -12,13 +11,6 @@ const Page = () => {
     body: string;
     published_at: string;
     image?: string | null;
-  }
-
-  // Image interfeysi
-  interface Image {
-    id: number;
-    image: string;
-    post: number;
   }
 
   const [posts, setPosts] = useState<Post[]>([]);
@@ -61,9 +53,7 @@ const Page = () => {
   if (loading) return <p>Loading...</p>;
 
   const firstPost = posts[0];
-  console.log("Posts:", posts);
-
-  const otherPosts = posts.slice(1, 4);
+  const otherPosts = posts.slice(1);
 
   const formatDate = (iso: string) => {
     const date = new Date(iso);
@@ -77,7 +67,7 @@ const Page = () => {
 
   return (
     <section className="py-10">
-      <div className=" px-4">
+      <div className="px-4">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             {firstPost && (
@@ -86,22 +76,26 @@ const Page = () => {
                   <div className="text-gray-500 text-sm">
                     {formatDate(firstPost.published_at)}
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold leading-snug hover:text-blue-500 cursor-pointer duration-100 line-clamp-3">
-                    {firstPost.title}
-                  </h2>
+                  <Link href={`${firstPost.id}`}>
+                    <h2 className="text-2xl md:text-3xl font-bold leading-snug hover:text-blue-500 cursor-pointer duration-100 line-clamp-3">
+                      {firstPost.title}
+                    </h2>
+                  </Link>
                   <p className="text-gray-500 text-base leading-relaxed line-clamp-5">
                     {firstPost.body}
                   </p>
                 </div>
                 <div className="w-full md:w-1/2">
                   {firstPost.image ? (
-                    <Image
-                      src={firstPost.image}
-                      alt="Post image"
-                      width={500}
-                      height={300}
-                      className="rounded-xl w-full h-auto object-cover"
-                    />
+                    <Link href={`${firstPost.id}`}>
+                      <Image
+                        src={firstPost.image}
+                        alt="Post image"
+                        width={500}
+                        height={300}
+                        className="rounded-xl w-full h-auto object-cover"
+                      />
+                    </Link>
                   ) : (
                     <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-500 text-sm rounded-xl">
                       Rasm yo‘q
@@ -113,7 +107,11 @@ const Page = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {otherPosts.map((post) => (
-                <div key={post.id} className="space-y-2 cursor-pointer group">
+                <Link
+                  key={post.id}
+                  href={`${post.id}`}
+                  className="space-y-2 cursor-pointer group block"
+                >
                   <div className="overflow-hidden rounded-xl">
                     {post.image ? (
                       <Image
@@ -130,29 +128,26 @@ const Page = () => {
                     )}
                   </div>
                   <div className="text-gray-500 text-sm">
-                    23:34 / 26.03.2025
+                    {formatDate(post.published_at)}
                   </div>
                   <h3 className="font-medium text-base leading-snug group-hover:text-blue-500 duration-100">
                     {post.title}
                   </h3>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
 
           <div className="w-full lg:w-[350px] space-y-4">
-            <h3 className="text-xl font-bold border-b pb-2">
-              So‘nggi yangiliklar
-            </h3>
+            <h3 className="text-xl font-bold border-b pb-2">So‘nggi yangiliklar</h3>
 
             {posts.slice(0, 4).map((post) => (
-              <div key={post.id} className="border-b pb-2">
+              <Link key={post.id} href={`${post.id}`} className="block border-b pb-2">
                 <h4 className="font-medium">{post.title}</h4>
                 <span className="text-sm text-gray-500">
-                  {/* Kategoriya backenddan bo‘lsa alohida qo‘shiladi, hozircha faqat vaqt */}
                   {formatDate(post.published_at)}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
