@@ -94,7 +94,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   };
 
   return (
-    <div className="py-10 px-4 max-w-6xl mx-auto">
+    <div className="py-10 px-4 max-w-6xl">
       {/* Bitta post ko‘rinishi */}
       <div className="mb-10">
         <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
