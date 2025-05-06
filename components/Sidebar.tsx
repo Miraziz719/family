@@ -82,9 +82,8 @@ export default function AppSidebar() {
   const router = useRouter()
 
   React.useEffect(() => {
-    if (status === 'unauthenticated') {
-      signOut();
-    }
+    if (status === 'unauthenticated' && session) signOut();
+    if(status === 'authenticated' && !session) signOut();
   }, [status, session]); 
 
   return (
