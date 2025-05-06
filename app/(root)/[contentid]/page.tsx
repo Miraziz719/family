@@ -94,7 +94,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   };
 
   return (
-    <div className="py-10 px-4 max-w-6xl">
+    <div className="py-10 px-4 w-full">
       {/* Bitta post ko‘rinishi */}
       <div className="mb-10">
         <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
@@ -108,7 +108,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
             alt="Post image"
             width={800}
             height={400}
-            className="rounded-xl mb-6 w-full h-auto object-cover"
+            className="rounded-xl mb-6 w-[80%] h-auto object-cover"
           />
         ) : (
           <div className="bg-gray-200 w-full h-60 flex items-center justify-center text-gray-500 text-sm rounded-xl mb-6">
