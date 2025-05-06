@@ -1,14 +1,15 @@
-// "use client";
+"use client";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/lib/axiosInstance";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
-interface PageProps {
-  params: {
-    contentid: string;
-  };
-}
+// interface PageProps {
+//   params: {
+//     contentid: string;
+//   };
+// }
 
 interface Post {
   id: number;
@@ -18,11 +19,12 @@ interface Post {
   image?: string | null;
 }
 
-const Page: React.FC<PageProps> = ({ params }) => {
+const Page: React.FC = () => {
   const [post, setPost] = useState<Post | null>(null);
   const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const contentId = params.contentid;
+  const params = useParams();
+  const contentId = params?.contentid as string;
 
   useEffect(() => {
     const fetchData = async () => {
